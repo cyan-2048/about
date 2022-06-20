@@ -20,7 +20,7 @@ const files = getFiles("./docs/")
   .filter(function sift(a) {
     return ![".js", ".css", ".html"].some((e) => a.endsWith(e));
   })
-  .map((e) => e.replace(/^docs\//, "/"))
+  .map((e) => e.replace(/^docs\//, "./"))
   .map((a) => `url(${a})`);
 
 const final = `:root:before {
