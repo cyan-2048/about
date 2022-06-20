@@ -5,7 +5,7 @@
   import "./assets/global.css";
   import DWM from "./components/DWM.svelte";
 
-  let wallpaper = "/wallpaper.webp";
+  let wallpaper = "./wallpaper.webp";
   $: wallpaper && document.body.style.setProperty("--wallpaper", `url(${wallpaper})`);
 </script>
 

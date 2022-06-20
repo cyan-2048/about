@@ -60,7 +60,7 @@
       const { style } = main;
       if (Number(style.top.slice(0, -2)) < 0) style.top = 0;
       if (stop) {
-        document.body.style.cursor = "url(/cursor/aero_arrow.png), auto";
+        document.body.style.cursor = "url(./cursor/aero_arrow.png), auto";
       }
     }
 

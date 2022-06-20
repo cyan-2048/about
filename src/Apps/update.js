@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // run using node.js
 
 import fs from "fs";
