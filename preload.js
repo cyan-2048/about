@@ -19,7 +19,7 @@ function getFiles(directory = "./") {
 
 const files = getFiles("./docs/")
   .filter(function sift(a) {
-    return ![".js", ".css", ".html"].some((e) => a.endsWith(e));
+    return ![".js", ".css", ".html"].some((e) => a.endsWith(e)) && !a.includes(".references");
   })
   .map((e) => e.replace(/^docs\//, "./"))
   .map((a) => `url(${a})`);

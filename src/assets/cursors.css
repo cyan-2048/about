@@ -198,3 +198,11 @@
 .cursor-busy {
 	animation: cur_busy 0.9s infinite;
 }
+
+input:is([type="button"], [type="submit"], [type="reset"]), input[type="file"]::file-selector-button, button, label, * {
+	cursor: url("./cursor/aero_arrow.png"), auto
+}
+
+input:not(:disabled, [type="range"], [type="radio"], [type="checkbox"]), textarea:not(:disabled), [contenteditable] {
+	cursor: url("./cursor/aero_select.png"), auto
+}

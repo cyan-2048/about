@@ -7,8 +7,10 @@
 
   let wallpaper = "./wallpaper.webp";
   $: wallpaper && document.body.style.setProperty("--wallpaper", `url(${wallpaper})`);
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  import JSON5 from "json5";
+  window.JSON5 = JSON5;
 </script>
 
 <DWM />
-
-<svelte:window on:contextmenu={() => false} />

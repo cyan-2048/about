@@ -23,10 +23,19 @@
   export let resizable = true;
   export let draggable = true;
   export let focused = null;
+  export let focusedOnce = false;
+  export let style = "";
+  export let animateMount = true;
+  export let animateDestroy = true;
+  export let noPadding = false;
 
   $: _min = { height: min_height, width: min_width, ...min }; // decide min
 
   const dispatch = createEventDispatcher();
+
+  $: if (focusedOnce && !focused) {
+    dispatch("close");
+  }
 
   // elements
   let main, titlebar, btn_con;
@@ -44,6 +53,7 @@
 
     const { assign } = Object;
 
+    const unpx = (e) => Number(e.slice(0, -2));
     function px(num) {
       if (typeof num !== "number") return num;
       return num + "px";
@@ -56,9 +66,24 @@
       width: px(width || "unset"),
     });
 
+    function isInViewport(element) {
+      return (
+        element.offsetTop < window.innerHeight &&
+        element.offsetTop > -element.offsetHeight &&
+        element.offsetLeft > -element.offsetWidth &&
+        element.offsetLeft < window.innerWidth
+      );
+    }
+
     function backToZero(stop) {
       const { style } = main;
-      if (Number(style.top.slice(0, -2)) < 0) style.top = 0;
+
+      if (unpx(style.top) < 0) style.top = 0;
+      if (unpx(style.top) > window.innerHeight) style.top = px(window.innerHeight - 68);
+      if (unpx(style.left) < 0 && !isInViewport(main)) style.left = 0;
+      if (unpx(style.left) > window.innerWidth && !isInViewport(main))
+        style.left = px(window.innerWidth - main.offsetWidth);
+
       if (stop) {
         document.body.style.cursor = "url(./cursor/aero_arrow.png), auto";
       }
@@ -104,6 +129,7 @@
 
   function onClose() {
     !production && console.info("window close:", id);
+    if (!animateDestroy) return dispatch("close");
     closing = true;
     setTimeout(dispatch, 350, "close");
   }
@@ -117,15 +143,18 @@
   class:cursor-working={cursor === "working"}
   class:cursor-busy={cursor === "busy"}
   class:closing
+  class:animateMount
+  {style}
   style:z-index={zIndex}
 >
-  {#if title || buttons[0]}
+  {#if title || buttons?.[0]}
     <div on:pointerdown={() => dispatch("z-index")} bind:this={titlebar} class="title-bar">
       <div style:padding-right="{b_con_width}px" class="title-bar-text">{title}</div>
       <div bind:this={btn_con} class="title-bar-controls">
         {#each [buttons]
           .flat()
           .map((btn) => allButtons.find((a) => {
+              if (!btn) return false;
               let lc = btn.toLocaleLowerCase();
               return a.toLocaleLowerCase().includes(lc);
             }))
@@ -151,24 +180,36 @@
   {/if}
   <div
     on:pointerdown={() => dispatch("z-index")}
-    on:close={onClose}
     style:--t_height="{t_height}px"
     class="window-body"
+    style:padding={noPadding ? 0 : null}
   >
     <slot><p>There's so much room for activities! window.id: {id}</p></slot>
   </div>
 </div>
 
 <style>
+  .window:not([data-focused]) .title-bar-controls > button {
+    background: transparent;
+    box-shadow: unset;
+  }
+  .window:not([data-focused]) .title-bar-controls {
+    background: transparent;
+    box-shadow: unset;
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+
   .window::before,
   .title-bar {
-    background: rgba(0, 0, 0, 0) !important;
+    background: transparent !important;
+  }
+  .animateMount {
+    animation: openwindow 0.3s ease;
   }
   .window {
     touch-action: none;
     position: absolute;
     overflow: hidden;
-    animation: openwindow 0.3s ease;
   }
   .window-body {
     height: calc(100% - var(--t_height));

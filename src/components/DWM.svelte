@@ -5,9 +5,10 @@
   import { production } from "../lib/stores.js";
   import Taskbar from "./Taskbar.svelte";
 
-  console.log(apps);
-
   let windows = [];
+  let volume = 1;
+  let taskbarWindow = false;
+  let socials = null;
 
   function randomString() {
     return hashCode(String(Math.random()));
@@ -31,6 +32,7 @@
 
   function zIndex(window) {
     !production && console.info("update zIndex");
+    if (taskbarWindow) taskbarWindow = null;
     const len = windows.length;
     if (len === 1) return;
     const highest = getHighestZ();
@@ -47,6 +49,19 @@
       return { ...item, focused: null };
     });
   }
+
+  function openWindow({ detail }) {
+    windows = [...windows, { ...detail, zIndex: getHighestZ() + 1, id: randomString(), focused: null }];
+  }
+
+  function updatePropsByID(id, raw) {
+    const props = { ...raw };
+    delete props.id;
+    windows = windows.map((item) => {
+      if (item.id !== id) return item;
+      return { ...item, ...props };
+    });
+  }
 </script>
 
 {#each windows as window, i (window.id)}
@@ -59,18 +74,18 @@
         return { ...item, focused: true };
       });
     }}
+    on:open-window={openWindow}
     on:z-index={() => zIndex(window)}
     {...window}
   >
     {#if window.app}
       <svelte:component
         this={window.app.exec}
+        on:prop-update={({ detail }) => updatePropsByID(window.id, detail)}
         {window}
-        on:open-window={function ({ detail }) {
-          windows = [...windows, { ...detail, zIndex: getHighestZ() + 1, id: randomString(), focused: null }];
-        }}
+        on:open-window={openWindow}
       />
     {/if}
   </Window>
 {/each}
-<Taskbar {windows} />
+<Taskbar bind:socials bind:taskbarWindow bind:volume on:open-window={openWindow} {windows} />
