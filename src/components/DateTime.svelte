@@ -8,6 +8,7 @@
   onMount(() => {
     function getDateTime() {
       const date = new Date();
+      if (typeof window?.tick === "function") window.tick.call(date);
       !production && console.info("updating time...", date * 1);
       return (
         date.toLocaleTimeString("en-us", { minute: "numeric", hour: "numeric" }) +

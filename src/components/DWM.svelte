@@ -4,6 +4,7 @@
   import { apps } from "../Apps/apps.svelte";
   import { production } from "../lib/stores.js";
   import Taskbar from "./Taskbar.svelte";
+  import Desktop from "./Desktop.svelte";
 
   let windows = [];
   let volume = 1;
@@ -29,6 +30,7 @@
   }
 
   runApp("WindowCreator");
+  window.runApp = runApp;
 
   function zIndex(window) {
     !production && console.info("update zIndex");
@@ -64,6 +66,7 @@
   }
 </script>
 
+<Desktop bind:taskbarWindow />
 {#each windows as window, i (window.id)}
   <Window
     on:close={function () {

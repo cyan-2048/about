@@ -3,6 +3,8 @@
   import j from "../lib/jquery.js";
   import { createEventDispatcher, onMount } from "svelte";
   import { production } from "../lib/stores.js";
+  import SnapAnimation from "./SnapAnimation.svelte";
+  import getClientXY from "../lib/xy.js";
 
   // defaults
   const default_buttons = ["Minimize", "Maximize", "Close"];
@@ -11,7 +13,7 @@
   // props
   export let id = null;
   export let buttons = default_buttons;
-  export let title = null;
+  export let title = "";
   export let min_height = 158;
   export let min_width = 158;
   export let min = {};
@@ -28,6 +30,7 @@
   export let animateMount = true;
   export let animateDestroy = true;
   export let noPadding = false;
+  export let snappable = false;
 
   $: _min = { height: min_height, width: min_width, ...min }; // decide min
 
@@ -38,11 +41,22 @@
   }
 
   // elements
-  let main, titlebar, btn_con;
+  let main,
+    titlebar,
+    btn_con,
+    mounted = false;
 
   let t_height = 12;
   let b_con_width = 6;
   let cursor = null;
+
+  let snapping = false;
+
+  $: if (mounted && (draggable !== null || resizable !== null)) {
+    const h = (e) => (e ? "enable" : "disable");
+    if (j(main).draggable("instance")) j(main).draggable(h(draggable));
+    if (j(main).resizable("instance")) j(main).resizable(h(resizable));
+  }
 
   onMount(() => {
     dispatch("z-index");
@@ -76,10 +90,11 @@
     }
 
     function backToZero(stop) {
+      if (!main) return;
       const { style } = main;
 
       if (unpx(style.top) < 0) style.top = 0;
-      if (unpx(style.top) > window.innerHeight) style.top = px(window.innerHeight - 68);
+      if (unpx(style.top) > window.innerHeight - 50) style.top = px(window.innerHeight - 68);
       if (unpx(style.left) < 0 && !isInViewport(main)) style.left = 0;
       if (unpx(style.left) > window.innerWidth && !isInViewport(main))
         style.left = px(window.innerWidth - main.offsetWidth);
@@ -96,12 +111,12 @@
           minWidth: _min.width,
           minHeight: _min.height,
           cursor: false,
-          start: () => {
+          start() {
             !production && console.info("resize start");
             dispatch("z-index");
             backToZero();
           },
-          stop: () => {
+          stop() {
             !production && console.info("resize end");
             backToZero(true);
           },
@@ -109,20 +124,41 @@
       }
     }
 
+    function handleSnapping(top, left) {
+      if (top < 10) {
+        snapping = "top";
+      } else if (left < 10) {
+        snapping = "left";
+      } else if (left > window.innerWidth - 10) {
+        snapping = "right";
+      } else snapping = false;
+    }
+
     if (titlebar && draggable) {
       j(main).draggable({
         handle: titlebar,
         cursor: false,
-        start: () => {
+        start() {
           !production && console.info("drag start");
         },
-        stop: () => {
+        drag() {
+          if (snappable) {
+            const [left, top] = getClientXY(true);
+            if (!isNaN(top) && !isNaN(left)) handleSnapping(top, left);
+          }
+        },
+        stop() {
           !production && console.info("drag stop");
           backToZero(true);
+          if (snapping) snapping = false;
         },
       });
     }
-    return () => {};
+    mounted = true;
+    return () => {
+      if (j(main).draggable("instance")) j(main).draggable("destroy");
+      if (j(main).resizable("instance")) j(main).resizable("destroy");
+    };
   });
 
   let closing = false;
@@ -133,8 +169,17 @@
     closing = true;
     setTimeout(dispatch, 350, "close");
   }
+
+  function decideButtons(lebuttons) {
+    if (typeof lebuttons === "string") return [lebuttons];
+    else if (lebuttons instanceof Array) return lebuttons;
+    else return [];
+  }
 </script>
 
+{#if snapping}
+  <SnapAnimation direction={snapping} />
+{/if}
 <div
   data-focused={focused}
   bind:this={main}
@@ -147,37 +192,45 @@
   {style}
   style:z-index={zIndex}
 >
-  {#if title || buttons?.[0]}
-    <div on:pointerdown={() => dispatch("z-index")} bind:this={titlebar} class="title-bar">
-      <div style:padding-right="{b_con_width}px" class="title-bar-text">{title}</div>
-      <div bind:this={btn_con} class="title-bar-controls">
-        {#each [buttons]
-          .flat()
-          .map((btn) => allButtons.find((a) => {
-              if (!btn) return false;
-              let lc = btn.toLocaleLowerCase();
-              return a.toLocaleLowerCase().includes(lc);
-            }))
-          .filter((a) => a) as name (name)}
-          <button
-            on:click={function () {
-              function onMinimize() {
-                !production && console.info("window min:", id);
-              }
-              function onMaximize() {
-                !production && console.info("window max:", id);
-              }
-              function onRestore() {
-                !production && console.info("window res:", id);
-              }
-              [onMinimize, onMaximize, onClose, onRestore][allButtons.indexOf(name)]?.();
-            }}
-            aria-label={name}
-          />
-        {/each}
-      </div>
+  <div
+    on:pointerdown={() => dispatch("z-index")}
+    bind:this={titlebar}
+    class="title-bar"
+    class:ui-draggable-handle={draggable}
+  >
+    <div style:padding-right="{b_con_width}px" class="title-bar-text">{String(title) || (draggable ? "​" : "")}</div>
+    <div bind:this={btn_con} class="title-bar-controls">
+      {#each decideButtons(buttons)
+        .map((btn) => {
+          if (!btn) return;
+          const string = String(btn);
+          const sift = allButtons.find((a) => a
+              .toLocaleLowerCase()
+              .includes(string.toLocaleLowerCase().replaceAll("!", "")));
+          if (sift) {
+            return { name: sift, disabled: string.includes("!") };
+          }
+        })
+        .filter((a) => a) as { name, disabled }}
+        <button
+          on:click={function () {
+            function onMinimize() {
+              !production && console.info("window min:", id);
+            }
+            function onMaximize() {
+              !production && console.info("window max:", id);
+            }
+            function onRestore() {
+              !production && console.info("window res:", id);
+            }
+            [onMinimize, onMaximize, onClose, onRestore][allButtons.indexOf(name)]?.();
+          }}
+          aria-label={name}
+          {disabled}
+        />
+      {/each}
     </div>
-  {/if}
+  </div>
   <div
     on:pointerdown={() => dispatch("z-index")}
     style:--t_height="{t_height}px"
@@ -189,6 +242,12 @@
 </div>
 
 <style>
+  .title-bar-controls > button:disabled {
+    pointer-events: none;
+  }
+  .title-bar-controls > button:disabled::before {
+    opacity: 0.5;
+  }
   .window:not([data-focused]) .title-bar-controls > button {
     background: transparent;
     box-shadow: unset;

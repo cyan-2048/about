@@ -61,8 +61,7 @@
     const month = relative.getMonth();
     const toSlice = 42 - (getDaysPrev(relative).length + Calendar.getDays(month, year).length);
     if (toSlice === 0) return [];
-    const isDecember = month === 11;
-    return Calendar.getDays(isDecember ? 0 : month + 1, isDecember ? year + 1 : year).slice(0, toSlice);
+    return [...Array(toSlice).keys()].map((a) => a + 1);
   }
 
   function updateToday() {
@@ -133,7 +132,7 @@
           {#each getDaysPrev(currentDate) as prev}
             <button on:pointerdown={() => moveMonth(-1)} class="grey">{prev}</button>
           {/each}
-          {#each Calendar.getDays(currentDate.getMonth(), currentDate.getFullYear()) as days}
+          {#each Calendar.getDays(currentDate.getMonth(), currentDate.getFullYear()) as days (days)}
             <button class:now={days === today}>{days}</button>
           {/each}
           {#each getNextDays(currentDate) as next}
@@ -267,6 +266,7 @@
   #bottom {
     height: 43px;
     background-color: #f1f5fb;
+    box-shadow: inset 0 7px 8px -10px rgba(0, 0, 0, 0.4);
   }
 
   #analog > * {

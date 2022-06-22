@@ -35,8 +35,8 @@
 
 <div class="field-row-stacked" style="width: 200px">
   <label for={id}>set props in JSON5 format</label>
-  <textarea bind:value={text} {id} rows="8" />
+  <textarea bind:value={text} {id} rows="4" />
   <label for={id + "reactive"}>set reactive props in JSON5 format</label>
-  <textarea bind:value={reactive} id={id + "reactive"} rows="8" />
+  <textarea bind:value={reactive} id={id + "reactive"} rows="4" />
 </div>
 <button on:click={() => openWindow(toProps || window)}>Open Another Window</button>

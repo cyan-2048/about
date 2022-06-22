@@ -1,3 +1,7 @@
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
   overflow: hidden;
   background: var(--wallpaper) 0 / cover fixed;
@@ -12,4 +16,9 @@ html, body {
 
 .window {
   transition: box-shadow 0.1s linear;
+}
+
+.ui-selectable-helper {
+  background-color: green;
+  position: absolute;
 }

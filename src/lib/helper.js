@@ -73,3 +73,8 @@ export function chunk(array, chunkSize) {
 export function closest(array, goal) {
   return array.reduce((prev, curr) => (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev));
 }
+
+export function toFixedNumber(num, digits = 0, base) {
+  var pow = Math.pow(base || 10, digits);
+  return Math.round(num * pow) / pow;
+}

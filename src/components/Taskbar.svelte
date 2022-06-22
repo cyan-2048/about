@@ -4,6 +4,7 @@
   import { production } from "../lib/stores";
   import DateTime from "./DateTime.svelte";
   import DateWindow from "./DateWindow.svelte";
+  import StartMenu from "./StartMenu.svelte";
   import VolumeWindow from "./VolumeWindow.svelte";
   import Window from "./Window.svelte";
 
@@ -13,8 +14,7 @@
 
   let main,
     battery = null,
-    charging = false,
-    connection = null;
+    charging = false;
 
   function siftWindows(windows) {}
 
@@ -70,6 +70,8 @@
   <VolumeWindow bind:volume />
 {:else if taskbarWindow === "date"}
   <DateWindow />
+{:else if taskbarWindow === "start"}
+  <StartMenu {socials} />
 {/if}
 <main id="taskbar" bind:this={main}>
   <div on:click={() => toggle("start")} class:focused={taskbarWindow === "start"} id="start" />
@@ -113,25 +115,29 @@
     position: relative;
   }
   #start::after,
+  #start::before,
   #start {
     background-size: 58px;
     background-position-y: -9.6px;
     background-position-x: center;
   }
-  #start::after {
+  #start::after,
+  #start::before {
     content: "";
     width: 100%;
     height: 100%;
     position: absolute;
     opacity: 0;
     transition: opacity 0.5s ease;
+  }
+  #start::before {
     background-image: url("./start/start-hovered.png");
   }
-  #start:hover::after,
+  #start:hover::before,
   #start.focused::after {
     opacity: 1;
   }
-  #start.focused::after {
+  #start::after {
     background-image: url("./start/start-selected.png") !important;
   }
   #taskbar {
@@ -144,7 +150,7 @@
     border-top: solid 1px rgba(255, 255, 255, 0.5);
     box-shadow: 0 -1px 0 0 #222;
     z-index: 9999;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(1.5px);
     background-color: rgba(0, 0, 0, 0.15);
   }
   #taskbar > * {

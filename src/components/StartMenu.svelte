@@ -1,0 +1,81 @@
+<script>
+  export let socials;
+</script>
+
+<main>
+  <div class="avatar">
+    <img src={socials?.discord?.avatar || "./start/default.bmp"} alt />
+  </div>
+  <div class="body">
+    <div class="items">
+      <div>Cyan</div>
+      <div>Documents</div>
+      <div>Pictures</div>
+      <div>Music</div>
+      <div class="spacer" />
+      <div>Favorites</div>
+      <div>This PC</div>
+      <div class="spacer" />
+      <div>Control Panel</div>
+      <div>Devices and Printers</div>
+      <div>Run...</div>
+    </div>
+  </div>
+</main>
+
+<style>
+  * {
+    user-select: none;
+  }
+  .spacer {
+    margin: 8px 0;
+    width: 0;
+    height: 0;
+  }
+  .items > *:not(.spacer) {
+    color: white;
+    width: 140px;
+    height: 29px;
+    line-height: 28px;
+    padding-left: 8px;
+  }
+  .items > *:not(.spacer):hover {
+    background-image: url(./start/start_focus_glass.png);
+  }
+  .items {
+    position: absolute;
+    width: 146px;
+    top: 42.5px;
+    right: -1.5px;
+  }
+  .body {
+    width: 399px;
+    height: 456px;
+    top: 26px;
+    position: absolute;
+  }
+  .avatar {
+    width: 56px;
+    padding: 5px;
+    position: absolute;
+    right: 46px;
+    top: 1px;
+  }
+  main {
+    background-image: url(./start/menu.webp);
+    height: 483px;
+    width: 400px;
+    position: fixed;
+    z-index: 69696969;
+    bottom: 38px;
+    animation: menu 0.2s ease;
+  }
+  @keyframes menu {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
