@@ -29,6 +29,7 @@
         try {
           const res = await fetch("https://website.cyan-2048.workers.dev/socials");
           socials = await res.json();
+          await new Promise((res) => setTimeout(res, 1000));
         } catch (e) {}
         attempts++;
       }
