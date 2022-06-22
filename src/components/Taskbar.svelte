@@ -24,7 +24,8 @@
     let attempts = 0;
     async function getSocials() {
       if (!production) return;
-      while (socials === null && attempts < 0) {
+      while (socials === null) {
+        if (attempts === 10) break;
         try {
           const res = await fetch("https://website.cyan-2048.workers.dev/socials");
           socials = await res.json();
