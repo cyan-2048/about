@@ -31,6 +31,7 @@
   export let animateDestroy = true;
   export let noPadding = false;
   export let snappable = false;
+  export let noTitleBar = false;
 
   $: _min = { height: min_height, width: min_width, ...min }; // decide min
 
@@ -192,45 +193,41 @@
   {style}
   style:z-index={zIndex}
 >
-  <div
-    on:pointerdown={() => dispatch("z-index")}
-    bind:this={titlebar}
-    class="title-bar"
-    class:ui-draggable-handle={draggable}
-  >
-    <div style:padding-right="{b_con_width}px" class="title-bar-text">{String(title) || (draggable ? "​" : "")}</div>
-    <div bind:this={btn_con} class="title-bar-controls">
-      {#each decideButtons(buttons)
-        .map((btn) => {
-          if (!btn) return;
-          const string = String(btn);
-          const sift = allButtons.find((a) => a
-              .toLocaleLowerCase()
-              .includes(string.toLocaleLowerCase().replaceAll("!", "")));
-          if (sift) {
-            return { name: sift, disabled: string.includes("!") };
-          }
-        })
-        .filter((a) => a) as { name, disabled }}
-        <button
-          on:click={function () {
-            function onMinimize() {
-              !production && console.info("window min:", id);
+  {#if !noTitleBar}
+    <div on:pointerdown={() => dispatch("z-index")} bind:this={titlebar} class="title-bar">
+      <div style:padding-right="{b_con_width}px" class="title-bar-text">{String(title) || (draggable ? "​" : "")}</div>
+      <div bind:this={btn_con} class="title-bar-controls">
+        {#each decideButtons(buttons)
+          .map((btn) => {
+            if (!btn) return;
+            const string = String(btn);
+            const sift = allButtons.find((a) => a
+                .toLocaleLowerCase()
+                .includes(string.toLocaleLowerCase().replaceAll("!", "")));
+            if (sift) {
+              return { name: sift, disabled: string.includes("!") };
             }
-            function onMaximize() {
-              !production && console.info("window max:", id);
-            }
-            function onRestore() {
-              !production && console.info("window res:", id);
-            }
-            [onMinimize, onMaximize, onClose, onRestore][allButtons.indexOf(name)]?.();
-          }}
-          aria-label={name}
-          {disabled}
-        />
-      {/each}
-    </div>
-  </div>
+          })
+          .filter((a) => a) as { name, disabled }}
+          <button
+            on:click={function () {
+              function onMinimize() {
+                !production && console.info("window min:", id);
+              }
+              function onMaximize() {
+                !production && console.info("window max:", id);
+              }
+              function onRestore() {
+                !production && console.info("window res:", id);
+              }
+              [onMinimize, onMaximize, onClose, onRestore][allButtons.indexOf(name)]?.();
+            }}
+            aria-label={name}
+            {disabled}
+          />
+        {/each}
+      </div>
+    </div>{/if}
   <div
     on:pointerdown={() => dispatch("z-index")}
     style:--t_height="{t_height}px"

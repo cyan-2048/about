@@ -72,12 +72,11 @@
   const props = {
     focused: true,
     draggable: false,
-    title: null,
-    buttons: [],
+    noTitleBar: true,
     zIndex: 9999,
     resizable: false,
     width: 84,
-    height: 304,
+    height: 305,
     animateMount: false,
     top: "unset",
     left: "unset",
@@ -115,7 +114,7 @@
         max="100"
         value="100"
         on:change={async function () {
-          const audio = new Audio((await audios).ding);
+          const audio = new window.Audio((await audios).ding);
           audio.volume = volume;
           await audio.play();
           setContext(audio);
@@ -203,7 +202,7 @@
     width: 32px;
     height: 30px;
     position: absolute;
-    bottom: 67px;
+    bottom: 68px;
     right: 25px;
     background-color: white;
     border: none;

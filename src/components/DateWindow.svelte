@@ -9,7 +9,7 @@
     focused: true,
     draggable: false,
     title: null,
-    buttons: [],
+    noTitleBar: true,
     zIndex: 9999,
     resizable: false,
     width: 352,

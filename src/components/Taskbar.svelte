@@ -21,13 +21,15 @@
   $: taskbarItems = windows;
 
   onMount(() => {
+    let attempts = 0;
     async function getSocials() {
       if (!production) return;
-      while (socials === null) {
+      while (socials === null && attempts < 0) {
         try {
           const res = await fetch("https://website.cyan-2048.workers.dev/socials");
           socials = await res.json();
         } catch (e) {}
+        attempts++;
       }
     }
     getSocials();
