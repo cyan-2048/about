@@ -10,6 +10,7 @@
   let volume = 1;
   let taskbarWindow = false;
   let socials = null;
+  let contextmenu = () => {};
 
   function randomString() {
     return hashCode(String(Math.random()));
@@ -66,7 +67,7 @@
   }
 </script>
 
-<Desktop bind:taskbarWindow />
+<Desktop bind:contextmenu bind:taskbarWindow />
 {#each windows as window, i (window.id)}
   <Window
     on:close={function () {
@@ -81,7 +82,7 @@
     on:z-index={() => zIndex(window)}
     {...window}
   >
-    {#if window.app}
+    {#if window.app?.exec}
       <svelte:component
         this={window.app.exec}
         on:prop-update={({ detail }) => updatePropsByID(window.id, detail)}

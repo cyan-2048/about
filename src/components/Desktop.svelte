@@ -2,8 +2,11 @@
   import { onMount } from "svelte";
   import { production } from "../lib/stores";
   import j from "../lib/jquery.js";
-  export let taskbarWindow;
-
+  export let taskbarWindow, contextmenu;
+  
+  contextmenu = function () {
+    console.log("context menu!")
+  }
   let buildNumber, main;
 
   onMount(async () => {
@@ -25,6 +28,7 @@
 </script>
 
 <main
+on:contextmenu={contextmenu}
   bind:this={main}
   on:click={() => taskbarWindow && (taskbarWindow = null)}
   on:dblclick={() => {
