@@ -244,7 +244,14 @@
   #calendar button:not(.grey):hover,
   #calendar button:not(.grey):focus {
     box-shadow: inset 0 0 0 1px #86c6e8;
-    background-color: #eff6ff;
+    background: linear-gradient(
+      180deg,
+      hsla(0, 0%, 100%, 0.5),
+      rgba(184, 214, 251, 0.5) 60%,
+      rgba(184, 214, 251, 0.5) 90%,
+      hsla(0, 0%, 100%, 0.8)
+    );
+    color: #554eea;
   }
   #calendar button:focus {
     outline: 1px dotted #000;

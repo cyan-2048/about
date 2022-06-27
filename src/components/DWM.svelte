@@ -5,12 +5,14 @@
   import { production } from "../lib/stores.js";
   import Taskbar from "./Taskbar.svelte";
   import Desktop from "./Desktop.svelte";
+  import ContextMenu from "./ContextMenu.svelte";
 
   let windows = [];
   let volume = 1;
   let taskbarWindow = false;
   let socials = null;
-  let contextmenu = () => {};
+
+  let contextmenu = null;
 
   function randomString() {
     return hashCode(String(Math.random()));
@@ -35,6 +37,7 @@
 
   function zIndex(window) {
     !production && console.info("update zIndex");
+    if (contextmenu) contextmenu = null;
     if (taskbarWindow) taskbarWindow = null;
     const len = windows.length;
     if (len === 1) return;
@@ -67,6 +70,9 @@
   }
 </script>
 
+{#if contextmenu}
+  <ContextMenu {contextmenu} />
+{/if}
 <Desktop bind:contextmenu bind:taskbarWindow />
 {#each windows as window, i (window.id)}
   <Window

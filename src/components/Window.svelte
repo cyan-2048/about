@@ -251,7 +251,6 @@
   }
   .window:not([data-focused]) .title-bar-controls {
     background: transparent;
-    box-shadow: unset;
     border-color: rgba(0, 0, 0, 0.3);
   }
 

@@ -3,10 +3,7 @@
   import { production } from "../lib/stores";
   import j from "../lib/jquery.js";
   export let taskbarWindow, contextmenu;
-  
-  contextmenu = function () {
-    console.log("context menu!")
-  }
+
   let buildNumber, main;
 
   onMount(async () => {
@@ -28,9 +25,12 @@
 </script>
 
 <main
-on:contextmenu={contextmenu}
+  on:contextmenu={() => (contextmenu = [])}
   bind:this={main}
-  on:click={() => taskbarWindow && (taskbarWindow = null)}
+  on:pointerdown={() => {
+    taskbarWindow && (taskbarWindow = null);
+    contextmenu && (contextmenu = null);
+  }}
   on:dblclick={() => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
