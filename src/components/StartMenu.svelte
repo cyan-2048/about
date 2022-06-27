@@ -50,9 +50,27 @@
   }
   .body {
     width: 399px;
-    height: 456px;
     top: 26px;
     position: absolute;
+  }
+  main::before,
+  main::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  main::before {
+    background-image: url(./start/menu.webp);
+  }
+  main::after {
+    backdrop-filter: blur(1.5px);
+    bottom: 1px;
+    z-index: -10;
+  }
+  .body,
+  main::after {
+    height: 456px;
   }
   .avatar {
     width: 56px;
@@ -62,7 +80,6 @@
     top: 1px;
   }
   main {
-    background-image: url(./start/menu.webp);
     height: 483px;
     width: 400px;
     position: fixed;

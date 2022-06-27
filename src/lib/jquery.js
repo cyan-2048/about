@@ -1,5 +1,5 @@
-import $ from "./jquery/index.js";
-import ui from "./jquery/jquery-ui.js";
+import $ from "./jquery-ui/index.js";
+import ui from "./jquery-ui/jquery-ui.js";
 const jQuery = $(window);
 ui(jQuery);
 /*!

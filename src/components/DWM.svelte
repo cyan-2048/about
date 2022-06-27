@@ -1,7 +1,7 @@
 <script>
   import { hashCode } from "../lib/helper.js";
   import Window from "./Window.svelte";
-  import { apps } from "../Apps/apps.svelte";
+  import { apps } from "../apps/apps.svelte";
   import { production } from "../lib/stores.js";
   import Taskbar from "./Taskbar.svelte";
   import Desktop from "./Desktop.svelte";

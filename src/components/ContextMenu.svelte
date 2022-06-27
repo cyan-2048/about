@@ -24,8 +24,8 @@
 </script>
 
 <ul bind:this={el} class:overflow role="menu" class="main can-hover" style="width: 200px;">
-  <li role="menuitem" tabindex="0" aria-haspopup="true">View</li>
-  <li role="menuitem" tabindex="0" aria-haspopup="true">
+  <li role="menuitem" aria-haspopup="true">View</li>
+  <li role="menuitem" aria-haspopup="true">
     Sort by
     <ul role="menu">
       <li role="menuitem"><a>Name</a></li>
