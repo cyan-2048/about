@@ -32,6 +32,7 @@
   export let noPadding = false;
   export let snappable = false;
   export let noTitleBar = false;
+  export let isBright = false;
 
   $: _min = { height: min_height, width: min_width, ...min }; // decide min
 
@@ -190,8 +191,10 @@
   class:cursor-busy={cursor === "busy"}
   class:closing
   class:animateMount
+  class:is-bright={isBright}
   {style}
   style:z-index={zIndex}
+  on:close={onClose}
 >
   {#if !noTitleBar}
     <div on:pointerdown={() => dispatch("z-index")} bind:this={titlebar} class="title-bar">

@@ -1,4 +1,5 @@
 <script>
+  export let runApp;
   export let socials;
 </script>
 
@@ -18,7 +19,13 @@
       <div class="spacer" />
       <div>Control Panel</div>
       <div>Devices and Printers</div>
-      <div>Run...</div>
+      <div
+        on:click={function () {
+          runApp("Run");
+        }}
+      >
+        Run...
+      </div>
     </div>
   </div>
 </main>

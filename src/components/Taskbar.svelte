@@ -8,6 +8,7 @@
   import VolumeWindow from "./VolumeWindow.svelte";
   import Window from "./Window.svelte";
 
+  export let runApp;
   export let windows = [];
   export let volume;
   export let socials = null;
@@ -75,7 +76,7 @@
 {:else if taskbarWindow === "date"}
   <DateWindow />
 {:else if taskbarWindow === "start"}
-  <StartMenu {socials} />
+  <StartMenu {runApp} {socials} />
 {/if}
 <main id="taskbar" bind:this={main}>
   <div on:click={() => toggle("start")} class:focused={taskbarWindow === "start"} id="start" />

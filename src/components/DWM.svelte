@@ -1,11 +1,12 @@
 <script>
   import { hashCode } from "../lib/helper.js";
   import Window from "./Window.svelte";
-  import { apps } from "../apps/apps.svelte";
   import { production } from "../lib/stores.js";
   import Taskbar from "./Taskbar.svelte";
   import Desktop from "./Desktop.svelte";
   import ContextMenu from "./ContextMenu.svelte";
+
+  import apps from "../apps";
 
   let windows = [];
   let volume = 1;
@@ -76,7 +77,7 @@
 <Desktop bind:contextmenu bind:taskbarWindow />
 {#each windows as window, i (window.id)}
   <Window
-    on:close={function () {
+    on:close={() => {
       windows = windows.filter((a) => a.id !== window.id);
       const highest = getHighestZ();
       windows = windows.map((item) => {
@@ -89,13 +90,16 @@
     {...window}
   >
     {#if window.app?.exec}
+      <!-- svelte-ignore missing-declaration -->
       <svelte:component
         this={window.app.exec}
+        {runApp}
         on:prop-update={({ detail }) => updatePropsByID(window.id, detail)}
         {window}
+        on:close={() => document.getElementById(window.id)?.dispatchEvent(new CustomEvent("close"))}
         on:open-window={openWindow}
       />
     {/if}
   </Window>
 {/each}
-<Taskbar bind:socials bind:taskbarWindow bind:volume on:open-window={openWindow} {windows} />
+<Taskbar {runApp} bind:socials bind:taskbarWindow bind:volume on:open-window={openWindow} {windows} />

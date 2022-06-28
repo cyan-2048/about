@@ -11,15 +11,14 @@ const b = (name, index) => `  ${name}: {
 
 let files = fs
   .readdirSync("./")
-  .filter((e) => e !== "update.js" && e !== "apps.svelte")
+  .filter((e) => e.includes(".svelte"))
   .map((e) => e.replace(/.svelte$/, ""));
 
-const final = `<script context="module">
-${files.map(a).join("\n")}
+const final = `${files.map(a).join("\n")}
 
-export const apps = {
-${files.map(b).join("\n")}
-};
-</script>`;
+const apps = {${files.map(b).join("\n")}};
 
-fs.writeFileSync("./apps.svelte", final);
+export default apps;
+`;
+
+fs.writeFileSync("./index.js", final);

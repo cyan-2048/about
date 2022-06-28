@@ -1,7 +1,7 @@
 <script context="module">
   export const metadata = {
     name: "window_creator",
-    props: { buttons: "close", min: { height: 225, width: 228 } },
+    props: { isBright: false, buttons: "close", min: { height: 225, width: 228 } },
   };
 </script>
 
