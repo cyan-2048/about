@@ -1,7 +1,7 @@
 <script>
   import xy from "../lib/xy";
   import { onMount } from "svelte";
-  export let contextmenu;
+  // export let contextmenu;
   let el, overflow;
   onMount(() => {
     const { x, y } = xy();
