@@ -159,7 +159,6 @@
   }
   #taskbar > * {
     margin-top: -1px;
-    image-rendering: pixelated;
   }
   #tray {
     position: absolute;

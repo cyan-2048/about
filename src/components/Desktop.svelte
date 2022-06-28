@@ -4,25 +4,14 @@
   import j from "../lib/jquery.js";
   export let taskbarWindow, contextmenu;
 
-  let buildNumber, main;
+  let main;
 
-  onMount(async () => {
+  onMount(() => {
     j(main).selectable({
       appendTo: main,
       delay: 200,
       filter: "data-file",
     });
-    try {
-      if (!production) {
-        buildNumber =
-          localStorage.git_sha || (btoa(Math.random()) + btoa(Math.random())).replaceAll("=", "").slice(0, 40);
-        const res = await fetch("https://api.github.com/repos/cyan-2048/about-svelte/branches/main");
-        const json = await res.json();
-        const sha = json.commit.sha;
-        if (localStorage.git_sha !== sha) buildNumber = sha;
-        localStorage.git_sha = sha;
-      }
-    } catch (e) {}
   });
 </script>
 
@@ -71,7 +60,8 @@
   }}
 >
   {#if !production}
-    <div class="devbuild">Windows Developer Preview<br />Evaluation copy. Build {buildNumber}</div>
+    <!-- svelte-ignore missing-declaration -->
+    <div class="devbuild">Windows Developer Preview<br />Evaluation copy. Build {APP_VERSION}</div>
   {/if}
 </main>
 
