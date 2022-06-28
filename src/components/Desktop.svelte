@@ -9,6 +9,8 @@
   onMount(async () => {
     j(main).selectable({
       appendTo: main,
+      delay: 200,
+      filter: "data-file",
     });
     try {
       if (!production) {

@@ -203,6 +203,10 @@ input:is([type="button"], [type="submit"], [type="reset"]), input[type="file"]::
 	cursor: url("./cursor/aero_arrow.png"), auto
 }
 
-input:not(:disabled, [type="range"], [type="radio"], [type="checkbox"]), textarea:not(:disabled), [contenteditable] {
+input:not(:disabled, [type="range"], [type="radio"], [type="checkbox"]) {
 	cursor: url("./cursor/aero_select.png"), auto
+}
+
+textarea, [contenteditable] {
+	cursor: auto;
 }

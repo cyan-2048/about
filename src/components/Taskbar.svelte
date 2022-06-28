@@ -159,6 +159,7 @@
   }
   #taskbar > * {
     margin-top: -1px;
+    image-rendering: pixelated;
   }
   #tray {
     position: absolute;
@@ -172,7 +173,7 @@
   #show_desktop {
     width: 15px;
     height: 40px;
-    background-image: url("aero_peek_sprite.png") !important;
+    background-image: url("aero_peek_sprite.webp") !important;
     background-position-x: 0px;
     background-repeat: no-repeat;
     overflow: hidden;

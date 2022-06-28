@@ -260,7 +260,7 @@
   #analog {
     width: 126px;
     height: 126px;
-    background-image: url("./date/clock.png");
+    background-image: url("./date/clock.webp");
     position: absolute;
     right: 26px;
     top: 52px;
