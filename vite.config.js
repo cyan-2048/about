@@ -5,7 +5,7 @@ import fs from "fs";
 let APP_VERSION = null;
 
 try {
-  const file = "./.git/ORIG_HEAD";
+  const file = "./.git/refs/heads/main";
   if (fs.existsSync(file)) {
     APP_VERSION = JSON.stringify(fs.readFileSync(file, "utf8").slice(0, -1));
   } else throw "ORIG_HEAD File missing";
