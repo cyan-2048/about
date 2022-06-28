@@ -11,6 +11,8 @@
 
   import JSON5 from "json5";
   window.JSON5 = JSON5;
+
+  window.APP_VERSION = APP_VERSION;
 </script>
 
 <DWM />
