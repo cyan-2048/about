@@ -170,25 +170,18 @@
     justify-self: right;
     justify-content: right;
   }
-  #show_desktop {
-    width: 15px;
-    height: 40px;
-    background-image: url("aero_peek_sprite.webp") !important;
-    background-position-x: 0px;
-    background-repeat: no-repeat;
-    overflow: hidden;
-  }
 
   #show_desktop {
-    outline: none !important;
-    border-radius: 0px !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    box-shadow: none !important;
-    background-image: none;
+    all: unset;
+    border-radius: 0;
+    border: none;
+    width: 15px;
+    height: 40px;
+    background-image: url("aero_peek_sprite.webp");
+    background-position-x: 0;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    margin-top: -1px;
   }
 
   #show_desktop:hover {

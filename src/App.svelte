@@ -1,4 +1,5 @@
 <script>
+  navigator.serviceWorker.register("./sw.js");
   import "7.css/dist/7.css";
   import "./assets/reset.css";
   import "./assets/cursors.css";

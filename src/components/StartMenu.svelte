@@ -27,10 +27,42 @@
         Run...
       </div>
     </div>
+    <button class="shutdown">Shut Down</button>
   </div>
 </main>
 
 <style>
+  button.shutdown {
+    all: unset;
+    width: 100px;
+    height: 24px;
+    position: absolute;
+    bottom: 12px;
+    right: 42px;
+    padding-left: 8px;
+    color: white;
+    box-sizing: border-box;
+  }
+  button:not(:active, :hover) {
+    background-image: url(./start/shutdown.png);
+  }
+  button:hover {
+    background-image: url(./start/shutdown-hover.png);
+  }
+  button:active {
+    background-image: url(./start/shutdown-active.png);
+  }
+  button::after {
+    content: "";
+    background: url(./start/chev.png);
+    width: 7px;
+    height: 9px;
+    display: block;
+    position: absolute;
+    right: 7px;
+    top: 8px;
+  }
+
   * {
     user-select: none;
   }
